@@ -1,0 +1,69 @@
+---
+title: "Data Mining Assignment 3"
+author: ""
+date: ""
+output:
+  md_document: default
+  pdf_document: default
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Problem 3: Association rules for grocery purchases    
+Dataset: groceries.txt   
+```{r 3.loading libraries, echo=FALSE, message=FALSE, warning=FALSE}
+library(arulesViz)
+library(arules)
+library(tidyverse)
+library(igraph)
+```
+```{r 3.reading data, echo=FALSE, message=FALSE, warning=FALSE}
+trans1<-read.transactions("https://raw.githubusercontent.com/jgscott/ECO395M/master/data/groceries.txt", format="basket", sep=",", skip=0)
+```
+We take a look at the dimensions of this data:  
+```{r 3.checking dimensions, echo=FALSE, message=FALSE, warning=FALSE}
+dim(trans1)
+```
+This means we have 9835 transactions and 169 distinct items.  
+The top 10 most items in terms of abosolute frequencies are:-  
+```{r 3.top 10 abosolute frequencies, echo=FALSE, message=FALSE, warning=FALSE}
+itemFrequencyPlot(trans1, topN=10, type="absolute", main="Item Frequency")
+```
+The top 10 most items in terms of relative frequencies are:-  
+```{r 3.top 10 relative frequencies, echo=FALSE, message=FALSE, warning=FALSE}
+itemFrequencyPlot(trans1, topN=10, type="relative", main="Item Frequency")
+```
+The next step is to analyze the rules using the A-Priori Algorithm. We picked the thresholds of support as 0.005, confidence as 0.1 and lift as 1. We chose the support threshold as 0.005 as we wanted to capture rules of only those items that have popularity of at least 0.5%. We chose the threshold of confidence as 0.1 as we are interested in only those (X,Y) pairs such that the Prob(Y|X) is at least 10%. We chose lift threshold to be 1 as it is the traditional threshold that implies which implies that item Y is likely to be bought if item X is bought.  
+```{r 3.A-Priopri Algorithm, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+rules.trans1 = apriori(trans1, 
+	parameter=list(support=.005, confidence=.1))
+rules.trans1=subset(rules.trans1, subset = lift > 1)
+```
+Now we plot all the rules in (support, confidence) space.  
+```{r 3.plotting in (support, confidence) space, echo=FALSE, message=FALSE, warning=FALSE}
+plot(rules.trans1)
+```
+We can notice from the above graph that the high lift rules tend to have low support.  
+Similarly, we plot all the rules in (support, lift) space.  
+```{r 3.plotting in (support, lift) space, echo=FALSE, message=FALSE, warning=FALSE}
+plot(rules.trans1, measure = c("support", "lift"), shading = "confidence")
+```
+The top 10 rules based on the confidence are-  
+```{r top 10 rules, echo=FALSE, message=FALSE, warning=FALSE}
+subrules <- head(rules.trans1, n = 10, by = "confidence")
+inspect(subrules)
+```
+We graphically visualize the top 10 rules by the following graphs-  
+```{r Visualization 1, echo=FALSE, message=FALSE, warning=FALSE}
+playlists_graph=associations2igraph(subrules, associationsAsNodes = FALSE)
+plot(playlists_graph)
+```
+```{r Visualization 2, echo=FALSE, message=FALSE, warning=FALSE}
+plot(subrules, method = "graph", 
+     measure = "confidence", shading = "lift")
+```
+```{r Visualization 3, echo=FALSE, message=FALSE, warning=FALSE}
+plot(subrules, method="paracoord")
+```
+We can see from the above plots that fruits, vegetables and dairy products are the most common grocery items. We can see that if a person bought fruits, vegetables and dairy products; it is very likely for us to see them adding whole milk in his/her basket as well. We can also see that if a person bought citrus fruit, root vegetables, and whole milk; it is very likely for us to see them adding other vegetables in his/her basket as well.  
+The above discoveries make perfect sense as these are very common grocery items and this behavior is often observed in the grocery stores.  
