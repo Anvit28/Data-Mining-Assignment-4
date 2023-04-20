@@ -16,6 +16,7 @@ Dataset: wine.csv
 ```{r 1.loading libraries, echo=FALSE, message=FALSE, warning=FALSE}
 library(ggpubr)
 library(factoextra)
+library(ggfortify)
 ```
 ```{r 1.reading data, echo=FALSE, message=FALSE, warning=FALSE}
 wine <- read.csv("https://raw.githubusercontent.com/jgscott/ECO395M/master/data/wine.csv")
@@ -24,7 +25,15 @@ X = wine[,-(12:13)]
 ```
 To see whether the 11 chemical propeties are capable of distinuishing wines on the basis of their color and quality, we compute principal component analysis (PCA) to reduce the data into small dimensions. We also perform k-means clustering using k=2 (for colors) and k=10 (for quality) to make the following plots.  
   
-A. Performing PCA and K-means clustering for distinguishing colors-  
+A. Performing PCA and K-means clustering for distinguishing colors-   
+  
+PCA plot:-    
+```{r PCA plot color, echo=FALSE, message=FALSE, warning=FALSE}
+pca_res <- prcomp(X, scale. = TRUE)
+autoplot(pca_res, data = wine, colour = 'color')
+```
+  
+k-means clustering plot:-      
 ```{r 1.k means colors, echo=FALSE, message=FALSE, warning=FALSE}
 set.seed(123)
 res.km <- kmeans(scale(X), 2, nstart = 25)
@@ -59,9 +68,17 @@ ggscatter(
 ) +
   stat_mean(aes(color = cluster), size = 4)
 ```
-We can see that the PCA model does a better job at distinguishing between the red and white wines relative to k-means clustering algorithm. This is likely because PCA compresses the features, and k-means clustering compresses the data points. Since, we're focusing on features it works well in our case.    
+We can see that the k-means clustering model does a better job at distinguishing between the red and white wines relative to PCA. This is likely because PCA compresses the features, and k-means clustering compresses the data points. Since, we're focusing on similarity between data points, so the observation is intuitive.    
   
 B. Performing PCA and K-means clustering for distinguishing quality-   
+  
+PCA plot:-  
+```{r 1.PCA plot quality, echo=FALSE, message=FALSE, warning=FALSE}
+pca_res <- prcomp(X, scale. = TRUE)
+autoplot(pca_res, data = wine, color = 'quality')
+```
+  
+k-means clustering plot:-    
 ```{r 1.k means quality, echo=FALSE, message=FALSE, warning=FALSE}
 set.seed(123)
 res.km <- kmeans(scale(X), 10, nstart = 25)
@@ -94,10 +111,12 @@ ggscatter(
   stat_mean(aes(color = cluster), size = 4)+
   scale_shape_identity()
 ```
-Based on analysis of the above graph, it appears that the PCA method may not be effective in accurately differentiating between wines and different quality levels as there exists very strong overlaps across different qualitites of the wine.  
+  
+Based on analysis of the above graph, it appears that neither PCA nor k-means clustering method are effective in accurately differentiating between wines and different quality levels as there exists very strong overlaps across different qualitites of the wine.  
+
 We can conclude that the unsupervised algorithm used was relatively able to distinguish between red and white wines. There are margin of errors, but the results still could be interpreted.  
   
-We can see below the variance percent of each dimension (in sorted order)-   
+On an extra note, we can see below the variance percent of each dimension (in sorted order)-     
 ```{r 1.variance percent, echo=FALSE, message=FALSE, warning=FALSE}
 eigenvalue <- round(get_eigenvalue(res.pca), 1)
 variance.percent <- eigenvalue$variance.percent
@@ -183,6 +202,7 @@ ggdraw() +
   draw_plot(B, x = .5, y = .5, width = .5, height = .5) +
   draw_plot(C, x = 0, y = 0, width = .65, height = .5)
 ```
+  
 As we can see from the graphs, the first cluster has mostly positive values of PC5. The second cluster has positive values of PC4, third cluster has positive values of PC3, fourth cluster does not have any features, fifth cluster has positive values of PC1 and PC2.  
 
 By looking how principal components were formed in terms of categories, we can define four segments (they are almost the same as segment defined by looking on correlations):  
@@ -244,10 +264,12 @@ The top 10 most items in terms of abosolute frequencies are:-
 ```{r 3.top 10 abosolute frequencies, echo=FALSE, message=FALSE, warning=FALSE}
 itemFrequencyPlot(trans1, topN=10, type="absolute", main="Item Frequency")
 ```
+   
 The top 10 most items in terms of relative frequencies are:-    
 ```{r 3.top 10 relative frequencies, echo=FALSE, message=FALSE, warning=FALSE}
 itemFrequencyPlot(trans1, topN=10, type="relative", main="Item Frequency")
 ```
+  
 The next step is to analyze the rules using the A-Priori Algorithm. We picked the thresholds of support as 0.005, confidence as 0.1 and lift as 1. We chose the support threshold as 0.005 as we wanted to capture rules of only those items that have popularity of at least 0.5%. We chose the threshold of confidence as 0.1 as we are interested in only those (X,Y) pairs such that the Prob(Y|X) is at least 10%. We chose lift threshold to be 1 as it is the traditional threshold that implies which implies that item Y is likely to be bought if item X is bought.  
 ```{r 3.A-Priopri Algorithm, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 rules.trans1 = apriori(trans1, 
@@ -258,11 +280,13 @@ Now we plot all the rules in (support, confidence) space.
 ```{r 3.plotting in (support, confidence) space, echo=FALSE, message=FALSE, warning=FALSE}
 plot(rules.trans1)
 ```
+  
 We can notice from the above graph that the high lift rules tend to have low support.  
 Similarly, we plot all the rules in (support, lift) space.    
 ```{r 3.plotting in (support, lift) space, echo=FALSE, message=FALSE, warning=FALSE}
 plot(rules.trans1, measure = c("support", "lift"), shading = "confidence")
 ```
+  
 The top 10 rules based on the confidence are-   
 ```{r 3.top 10 rules, echo=FALSE, message=FALSE, warning=FALSE}
 subrules <- head(rules.trans1, n = 10, by = "confidence")
@@ -280,5 +304,6 @@ plot(subrules, method = "graph",
 ```{r 3.Visualization 3, echo=FALSE, message=FALSE, warning=FALSE}
 plot(subrules, method="paracoord")
 ```
+  
 We can see from the above plots that fruits, vegetables and dairy products are the most common grocery items. We can see that if a person bought fruits, vegetables and dairy products; it is very likely for us to see them adding whole milk in his/her basket as well. We can also see that if a person bought citrus fruit, root vegetables, and whole milk; it is very likely for us to see them adding other vegetables in his/her basket as well.  
 The above discoveries make perfect sense as these are very common grocery items and this behavior is often observed in the grocery stores.  

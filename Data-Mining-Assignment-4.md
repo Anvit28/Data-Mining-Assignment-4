@@ -14,26 +14,38 @@ quality) to make the following plots.
 
 A. Performing PCA and K-means clustering for distinguishing colors-
 
+PCA plot:-  
+![](Data-Mining-Assignment-4_files/figure-markdown_strict/PCA%20plot%20color-1.png)
+
+k-means clustering plot:-
+
 ![](Data-Mining-Assignment-4_files/figure-markdown_strict/1.colors%20classifcation%20plotting-1.png)
-We can see that the PCA model does a better job at distinguishing
-between the red and white wines relative to k-means clustering
-algorithm. This is likely because PCA compresses the features, and
-k-means clustering compresses the data points. Since, we’re focusing on
-features it works well in our case.
+We can see that the k-means clustering model does a better job at
+distinguishing between the red and white wines relative to PCA. This is
+likely because PCA compresses the features, and k-means clustering
+compresses the data points. Since, we’re focusing on similarity between
+data points, so the observation is intuitive.
 
 B. Performing PCA and K-means clustering for distinguishing quality-
 
+PCA plot:-  
+![](Data-Mining-Assignment-4_files/figure-markdown_strict/1.PCA%20plot%20quality-1.png)
+
+k-means clustering plot:-
+
 ![](Data-Mining-Assignment-4_files/figure-markdown_strict/1.quality%20classifcation%20plotting-1.png)
-Based on analysis of the above graph, it appears that the PCA method may
-not be effective in accurately differentiating between wines and
-different quality levels as there exists very strong overlaps across
-different qualitites of the wine.  
+
+Based on analysis of the above graph, it appears that neither PCA nor
+k-means clustering method are effective in accurately differentiating
+between wines and different quality levels as there exists very strong
+overlaps across different qualitites of the wine.
+
 We can conclude that the unsupervised algorithm used was relatively able
 to distinguish between red and white wines. There are margin of errors,
 but the results still could be interpreted.
 
-We can see below the variance percent of each dimension (in sorted
-order)-
+On an extra note, we can see below the variance percent of each
+dimension (in sorted order)-
 
     ##       eigenvalue variance.percent cumulative.variance.percent
     ## Dim.1        3.0             27.5                        27.5
@@ -88,6 +100,7 @@ to define the features of our clusters according to principal
 components. We will use four principal components in our analysis.
 
 ![](Data-Mining-Assignment-4_files/figure-markdown_strict/unnamed-chunk-2-1.png)
+
 As we can see from the graphs, the first cluster has mostly positive
 values of PC5. The second cluster has positive values of PC4, third
 cluster has positive values of PC3, fourth cluster does not have any
@@ -174,8 +187,10 @@ We take a look at the dimensions of this data:
 This means we have 9835 transactions and 169 distinct items.  
 The top 10 most items in terms of abosolute frequencies are:-  
 ![](Data-Mining-Assignment-4_files/figure-markdown_strict/3.top%2010%20abosolute%20frequencies-1.png)
+
 The top 10 most items in terms of relative frequencies are:-  
 ![](Data-Mining-Assignment-4_files/figure-markdown_strict/3.top%2010%20relative%20frequencies-1.png)
+
 The next step is to analyze the rules using the A-Priori Algorithm. We
 picked the thresholds of support as 0.005, confidence as 0.1 and lift
 as 1. We chose the support threshold as 0.005 as we wanted to capture
@@ -187,10 +202,12 @@ implies that item Y is likely to be bought if item X is bought.
 
 Now we plot all the rules in (support, confidence) space.  
 ![](Data-Mining-Assignment-4_files/figure-markdown_strict/3.plotting%20in%20(support,%20confidence)%20space-1.png)
+
 We can notice from the above graph that the high lift rules tend to have
 low support.  
 Similarly, we plot all the rules in (support, lift) space.  
 ![](Data-Mining-Assignment-4_files/figure-markdown_strict/3.plotting%20in%20(support,%20lift)%20space-1.png)
+
 The top 10 rules based on the confidence are-
 
     ##      lhs                     rhs                    support confidence    coverage     lift count
@@ -223,6 +240,7 @@ We graphically visualize the top 10 rules by the following graphs-
 ![](Data-Mining-Assignment-4_files/figure-markdown_strict/3.Visualization%201-1.png)
 ![](Data-Mining-Assignment-4_files/figure-markdown_strict/3.Visualization%202-1.png)
 ![](Data-Mining-Assignment-4_files/figure-markdown_strict/3.Visualization%203-1.png)
+
 We can see from the above plots that fruits, vegetables and dairy
 products are the most common grocery items. We can see that if a person
 bought fruits, vegetables and dairy products; it is very likely for us
