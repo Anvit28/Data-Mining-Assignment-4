@@ -33,7 +33,7 @@ pca_res <- prcomp(X, scale. = TRUE)
 autoplot(pca_res, data = wine, colour = 'color')
 ```
   
-k-means clustering plot:-      
+k-means clustering plot:-   
 ```{r 1.k means colors, echo=FALSE, message=FALSE, warning=FALSE}
 set.seed(123)
 res.km <- kmeans(scale(X), 2, nstart = 25)
@@ -50,6 +50,14 @@ ind.coord$cluster <- factor(res.km$cluster)
 #ind.coord$cluster = (ind.coord$cluster+1)
 # Add Species groups from the original data sett
 ind.coord$color <- wine$color
+#ind.coord$facidity=wine$fixed.acidity
+#ind.coord$vacidity=wine$volatile.acidity
+#ind.coord$sdioxide=wine$total.sulfur.dioxide
+#ind.coord$cacid=wine$citric.acid
+#ind.coord$density=wine$density
+#ind.coord$totalso2=wine$
+#summary(res.pca)
+#res.pca
 # Data inspection
 #head(ind.coord)
 ```
@@ -63,11 +71,11 @@ ggscatter(
   ind.coord, x = "Dim.1", y = "Dim.2", 
   color = "cluster", palette = "npg", ellipse = TRUE, ellipse.type = "convex",
   shape = "color", size = 1.5,  legend = "right", ggtheme = theme_bw(),
-  xlab = paste0("Dim 1 (", variance.percent[1], "% )" ),
-  ylab = paste0("Dim 2 (", variance.percent[2], "% )" )
-) +
+xlab = paste0("Dim 1 (", variance.percent[1], "% )" ),
+  ylab = paste0("Dim 2 (", variance.percent[2], "%")) +
   stat_mean(aes(color = cluster), size = 4)
 ```
+  
 We can see that the k-means clustering model does a better job at distinguishing between the red and white wines relative to PCA. This is likely because PCA compresses the features, and k-means clustering compresses the data points. Since, we're focusing on similarity between data points, so the observation is intuitive.    
   
 B. Performing PCA and K-means clustering for distinguishing quality-   
@@ -116,14 +124,23 @@ Based on analysis of the above graph, it appears that neither PCA nor k-means cl
 
 We can conclude that the unsupervised algorithm used was relatively able to distinguish between red and white wines. There are margin of errors, but the results still could be interpreted.  
   
+Information about Dimensions and PCs:-  
+  
 On an extra note, we can see below the variance percent of each dimension (in sorted order)-     
 ```{r 1.variance percent, echo=FALSE, message=FALSE, warning=FALSE}
 eigenvalue <- round(get_eigenvalue(res.pca), 1)
 variance.percent <- eigenvalue$variance.percent
 head(eigenvalue)
 ```
-We can see that the six dimensions contribute to roughly 86% of the variance percent.   
-  
+We can see that the six dimensions contribute to roughly 85.3% of the variance percent.  
+The information about all the PCs is given below-  
+```{r}
+res.pca
+```
+Next, we determine how much each variable is represented in the first two dimensions. This quality of representation is called the Cos2 and corresponds to the square cosine. A low value of Cos2 means that the variable is not perfectly represented by that component. A high value of Cos2, on the other hand, means a good representation of the variable on that component.  
+```{r}
+fviz_cos2(res.pca, choice = "var", axes = 1:2)
+```
 ## Problem 2: Market segmentation  
 Dataset: social_marketing.csv   
 ```{r 2.loading libraries, echo=FALSE, message=FALSE, warning=FALSE}
