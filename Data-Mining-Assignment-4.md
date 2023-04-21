@@ -62,8 +62,6 @@ We can see that the six dimensions contribute to roughly 85.3% of the
 variance percent.  
 The information about all the PCs is given below-
 
-    res.pca
-
     ## Standard deviations (1, .., p=11):
     ##  [1] 1.7406518 1.5791852 1.2475364 0.9851660 0.8484544 0.7793021 0.7232971
     ##  [8] 0.7081739 0.5805377 0.4771748 0.1811927
@@ -111,11 +109,8 @@ two dimensions. This quality of representation is called the Cos2 and
 corresponds to the square cosine. A low value of Cos2 means that the
 variable is not perfectly represented by that component. A high value of
 Cos2, on the other hand, means a good representation of the variable on
-that component.
-
-    fviz_cos2(res.pca, choice = "var", axes = 1:2)
-
-![](Data-Mining-Assignment-4_files/figure-markdown_strict/unnamed-chunk-2-1.png)
+that component.  
+![](Data-Mining-Assignment-4_files/figure-markdown_strict/1.PCS%20contribution-1.png)
 
 ## Problem 2: Market segmentation
 
@@ -128,7 +123,7 @@ analysis.
 
 First, we explore correlations between different categories.
 
-![](Data-Mining-Assignment-4_files/figure-markdown_strict/unnamed-chunk-3-1.png)
+![](Data-Mining-Assignment-4_files/figure-markdown_strict/unnamed-chunk-1-1.png)
 
 By looking at the correlation matrix, we can notice some patterns of the
 data, and approximately define segments:
@@ -158,7 +153,7 @@ to five clusters. Additionally, we conduct Principal Component Analysis
 to define the features of our clusters according to principal
 components. We will use four principal components in our analysis.
 
-![](Data-Mining-Assignment-4_files/figure-markdown_strict/unnamed-chunk-4-1.png)
+![](Data-Mining-Assignment-4_files/figure-markdown_strict/unnamed-chunk-2-1.png)
 
 As we can see from the graphs, the first cluster has mostly positive
 values of PC5. The second cluster has positive values of PC4, third

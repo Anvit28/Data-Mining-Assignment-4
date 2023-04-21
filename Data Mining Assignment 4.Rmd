@@ -134,11 +134,11 @@ head(eigenvalue)
 ```
 We can see that the six dimensions contribute to roughly 85.3% of the variance percent.  
 The information about all the PCs is given below-  
-```{r}
+```{r 1.PCS info, echo=FALSE, message=FALSE, warning=FALSE}
 res.pca
 ```
 Next, we determine how much each variable is represented in the first two dimensions. This quality of representation is called the Cos2 and corresponds to the square cosine. A low value of Cos2 means that the variable is not perfectly represented by that component. A high value of Cos2, on the other hand, means a good representation of the variable on that component.  
-```{r}
+```{r 1.PCS contribution, echo=FALSE, message=FALSE, warning=FALSE}
 fviz_cos2(res.pca, choice = "var", axes = 1:2)
 ```
   
