@@ -141,6 +141,7 @@ Next, we determine how much each variable is represented in the first two dimens
 ```{r}
 fviz_cos2(res.pca, choice = "var", axes = 1:2)
 ```
+  
 ## Problem 2: Market segmentation  
 Dataset: social_marketing.csv   
 ```{r 2.loading libraries, echo=FALSE, message=FALSE, warning=FALSE}

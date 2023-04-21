@@ -116,7 +116,9 @@ that component.
     fviz_cos2(res.pca, choice = "var", axes = 1:2)
 
 ![](Data-Mining-Assignment-4_files/figure-markdown_strict/unnamed-chunk-2-1.png)
-\## Problem 2: Market segmentation  
+
+## Problem 2: Market segmentation
+
 Dataset: social\_marketing.csv
 
 In this problem we need to analyze data and identify any interesting
